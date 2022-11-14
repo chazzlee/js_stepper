@@ -1,49 +1,34 @@
 @import url("./styles/reset.scss");
 
-#container {
-  padding: 20px;
+#sequencer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.grid {
-  width: 600px;
-  height: 250px;
-  display: flex;
-  flex-wrap: wrap;
+#playhead {
+  width: 100%;
+  height: 10px;
+  background-color: rgb(136, 136, 136);
+}
+
+#grid {
+  height: 400px;
+  width: 400px;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .cell {
-  width: 6.25%;
-  background-color: rgb(124, 124, 124);
-  border: 0.1px solid rgb(167, 166, 166);
+  border: 0.5px solid rgb(141, 141, 141);
+  background-color: rgb(195, 202, 209);
   cursor: pointer;
 }
 
-#toolbar {
-  padding-bottom: 5px;
-}
-
-#inner-container {
-  position: relative;
-}
-
-.keyboard {
-  height: 250px;
-  position: absolute;
-}
-
-.key {
-  background-color: whitesmoke;
-  height: calc(250px / 12);
-  width: 75px;
+.marker { 
+  background-color: rgb(82, 136, 194);
+  width: 100%;
+  height: 100%;
   cursor: pointer;
-  outline: 1px solid black;
-}
-
-#sequencer {
-  margin-left: 75px;
-}
-
-.sharp {
-  background-color: rgb(68, 68, 68);
-  color: white;
 }

@@ -4,16 +4,52 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./dist/main.css" />
-    <script src="./dist/main.js" defer></script>
+    <link rel="stylesheet" href="./main.css" />
+    <script src="./main.js" defer></script>
     <title>~#Project Name#~</title>
   </head>
   <body>
     <div id="app">
       <header>
         <h1>Stepper</h1>
+        <button id="context">Start Audio Context</button>
       </header>
-      <main id="container"></main>
+      <main id="container">
+        <div id="toolbar">
+          <div>
+            <button class="btn play-btn">Play</button>
+          </div>
+          <div>
+            <button class="btn stop-btn">Stop</button>
+          </div>
+          <div>
+            <button class="btn clear-btn">Clear</button>
+          </div>
+        </div>
+        <div id="sequencer-container">
+          <div id="sequencer">
+            <div id="playhead"></div>
+            <div id="grid">
+              <div class="cell" data-note="hihat" data-pos="[0, 0]"></div>
+              <div class="cell" data-note="hihat" data-pos="[0, 1]"></div>
+              <div class="cell" data-note="hihat" data-pos="[0, 2]"></div>
+              <div class="cell" data-note="hihat" data-pos="[0, 3]"></div>
+              <div class="cell" data-note="tomtom" data-pos="[1, 0]"></div>
+              <div class="cell" data-note="tomtom" data-pos="[1, 1]"></div>
+              <div class="cell" data-note="tomtom" data-pos="[1, 2]"></div>
+              <div class="cell" data-note="tomtom" data-pos="[1, 3]"></div>
+              <div class="cell" data-note="snare" data-pos="[2, 0]"></div>
+              <div class="cell" data-note="snare" data-pos="[2, 1]"></div>
+              <div class="cell" data-note="snare" data-pos="[2, 2]"></div>
+              <div class="cell" data-note="snare" data-pos="[2, 3]"></div>
+              <div class="cell" data-note="kick" data-pos="[3, 0]"></div>
+              <div class="cell" data-note="kick" data-pos="[3, 1]"></div>
+              <div class="cell" data-note="kick" data-pos="[3, 2]"></div>
+              <div class="cell" data-note="kick" data-pos="[3, 3]"></div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   </body>
 </html>
