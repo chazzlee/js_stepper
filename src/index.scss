@@ -1,0 +1,49 @@
+@import url("./styles/reset.scss");
+
+#container {
+  padding: 20px;
+}
+
+.grid {
+  width: 600px;
+  height: 250px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cell {
+  width: 6.25%;
+  background-color: rgb(124, 124, 124);
+  border: 0.1px solid rgb(167, 166, 166);
+  cursor: pointer;
+}
+
+#toolbar {
+  padding-bottom: 5px;
+}
+
+#inner-container {
+  position: relative;
+}
+
+.keyboard {
+  height: 250px;
+  position: absolute;
+}
+
+.key {
+  background-color: whitesmoke;
+  height: calc(250px / 12);
+  width: 75px;
+  cursor: pointer;
+  outline: 1px solid black;
+}
+
+#sequencer {
+  margin-left: 75px;
+}
+
+.sharp {
+  background-color: rgb(68, 68, 68);
+  color: white;
+}
