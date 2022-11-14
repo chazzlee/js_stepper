@@ -10,6 +10,13 @@ const config = {
     path: path.join(__dirname, "dist"), // bundled file in dist/
     filename: "[name].js",
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    compress: true,
+    port: 9000,
+  },
   module: {
     rules: [
       {

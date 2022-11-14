@@ -7,7 +7,7 @@
     "defaults"
   ],
   "scripts": {
-    "dev": "webpack --watch --mode=development",
+    "dev": "webpack serve --mode=development",
     "build": "webpack --mode=production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,7 +24,11 @@
     "regenerator-runtime": "^0.13.10",
     "sass": "^1.56.1",
     "sass-loader": "^13.2.0",
+    "tone": "^14.7.77",
     "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^4.11.1"
   }
 }
