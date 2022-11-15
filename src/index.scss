@@ -24,7 +24,7 @@
   width: 100px;
   display: grid;
   background-color: rgb(79, 122, 122);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   grid-template-columns: repeat(1, 1fr);
 }
 
@@ -42,7 +42,7 @@
   height: 200px;
   width: 400px;
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   grid-template-columns: repeat(8, 1fr);
 }
 

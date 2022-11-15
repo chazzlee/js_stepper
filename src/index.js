@@ -72,12 +72,16 @@ const tomtomDrum = new Tone.Player({
 const hihatCymbal = new Tone.Player({
   url: "./samples/hihats/closed/Cymatics x S1 - Closed Hihat 4.wav",
 }).toDestination();
+const openhatCymbal = new Tone.Player({
+  url: "./samples/hihats/open/Cymatics x S1 - Open Hihat 3.wav",
+}).toDestination();
 
 const samples = {
-  row_0: hihatCymbal,
-  row_1: tomtomDrum,
-  row_2: snareDrum,
-  row_3: kickDrum,
+  row_0: openhatCymbal,
+  row_1: hihatCymbal,
+  row_2: tomtomDrum,
+  row_3: snareDrum,
+  row_4: kickDrum,
 };
 
 const $keyboardKeys = Array.from($$(".key"));
@@ -116,11 +120,13 @@ let kickLoop = createEmptyLoop();
 let snareLoop = createEmptyLoop();
 let tomtomLoop = createEmptyLoop();
 let hihatLoop = createEmptyLoop();
+let openhatLoop = createEmptyLoop();
 
 let kickSeq;
 let snareSeq;
 let hihatSeq;
 let tomtomSeq;
+let openhatSeq;
 
 $playButton.addEventListener("click", async () => {
   console.log("context:", Tone.context.state);
@@ -142,25 +148,13 @@ $playButton.addEventListener("click", async () => {
     hihatSeq.dispose();
   }
 
+  if (openhatSeq) {
+    openhatSeq.dispose();
+  }
+
   if (tomtomSeq) {
     tomtomSeq.dispose();
   }
-
-  kickSeq = new Tone.Sequence((time, note) => {
-    playSample(kickDrum, time, note);
-  }, kickLoop);
-
-  snareSeq = new Tone.Sequence((time, note) => {
-    playSample(snareDrum, time, note);
-  }, snareLoop);
-
-  hihatSeq = new Tone.Sequence((time, note) => {
-    playSample(hihatCymbal, time, note);
-  }, hihatLoop);
-
-  tomtomSeq = new Tone.Sequence((time, note) => {
-    playSample(tomtomDrum, time, note);
-  }, tomtomLoop);
 
   if (Tone.Transport.state === "paused" || Tone.Transport.state === "stopped") {
     console.log("context:", Tone.context.state);
@@ -177,11 +171,17 @@ $playButton.addEventListener("click", async () => {
       playSample(hihatCymbal, time, note);
     }, hihatLoop).start(0);
 
+    openhatSeq = new Tone.Sequence((time, note) => {
+      playSample(openhatCymbal, time, note);
+    }, openhatLoop).start(0);
+
     tomtomSeq = new Tone.Sequence((time, note) => {
       playSample(tomtomDrum, time, note);
     }, tomtomLoop).start(0);
 
     Tone.Transport.start();
+    $playButton.disabled = true;
+    $stopButton.disabled = false;
     console.log("Transport started...");
     console.log("context:", Tone.context.state);
     console.log("transport:", Tone.context.state);
@@ -192,6 +192,8 @@ $stopButton.addEventListener("click", () => {
     Tone.Transport.stop();
     console.log("Transport stopped...");
     // TODO: is this paused or stopped/reset?
+    $playButton.disabled = false;
+    $stopButton.disabled = true;
   }
 });
 $clearButton.addEventListener("click", () => {
@@ -210,6 +212,7 @@ function resetLoops() {
   snareLoop = createEmptyLoop();
   tomtomLoop = createEmptyLoop();
   hihatLoop = createEmptyLoop();
+  openhatLoop = createEmptyLoop();
 
   if (kickSeq) {
     kickSeq.dispose();
@@ -221,6 +224,10 @@ function resetLoops() {
 
   if (hihatSeq) {
     hihatSeq.dispose();
+  }
+
+  if (openhatSeq) {
+    openhatSeq.dispose();
   }
 
   if (tomtomSeq) {
@@ -258,6 +265,13 @@ function handleNotePress(sample, options) {
       const marker = document.createElement("div");
       marker.classList.add("marker");
       options.element.append(marker);
+
+      //TODO: restart the loop while it's running if user adds another marker
+      // if (Tone.Transport.state === "started") {
+      //   Tone.Transport.stop();
+      //   console.log("clicked while running...");
+      //   console.log(Tone.Transport.state);
+      // }
     }
   } else if (options.button === 2 && options.element.childElementCount) {
     options.loop[col] = null;
@@ -289,7 +303,7 @@ Array.from($snareDrums).forEach(($snare) => {
   );
 });
 
-const $tomtomDrums = $$("[data-note='tomtom'");
+const $tomtomDrums = $$("[data-note='tomtom']");
 Array.from($tomtomDrums).forEach(($tomtom) => {
   $tomtom.addEventListener("mousedown", (e) =>
     handleNotePress(tomtomDrum, {
@@ -300,13 +314,24 @@ Array.from($tomtomDrums).forEach(($tomtom) => {
   );
 });
 
-const $hihatCymbals = $$("[data-note='hihat'");
+const $hihatCymbals = $$("[data-note='hihat']");
 Array.from($hihatCymbals).forEach(($hihat) => {
   $hihat.addEventListener("mousedown", (e) =>
     handleNotePress(hihatCymbal, {
       button: e.button,
       element: $hihat,
       loop: hihatLoop,
+    })
+  );
+});
+
+const $openhatCymbals = $$("[data-note='openhat']");
+Array.from($openhatCymbals).forEach(($openhat) => {
+  $openhat.addEventListener("mousedown", (e) =>
+    handleNotePress(openhatCymbal, {
+      button: e.button,
+      element: $openhat,
+      loop: openhatLoop,
     })
   );
 });
