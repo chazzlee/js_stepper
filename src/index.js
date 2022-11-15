@@ -33,25 +33,75 @@ $("#sequencer-container").addEventListener("contextmenu", (e) => {
   return false;
 });
 
-console.log(Tone.Transport.bpm.value);
+const $bpmValue = $("#bpm-value");
+const $bpmSlider = $("#bpm-slider");
+$bpmValue.textContent = Tone.Transport.bpm.value;
+$bpmSlider.value = Tone.Transport.bpm.value;
+
+$bpmSlider.addEventListener("input", (e) => {
+  const value = parseInt(e.target.value, 10);
+  $bpmValue.textContent = value;
+  Tone.Transport.bpm.set({
+    value,
+  });
+});
+
+Tone.Destination.volume.set({ value: -15 });
+
+const $volumeValue = $("#volume-value");
+const $volumeSlider = $("#volume-slider");
+$volumeValue.textContent = Math.floor(Tone.Destination.volume.value);
+$volumeSlider.value = Math.floor(Tone.Destination.volume.value);
+$volumeSlider.addEventListener("input", (e) => {
+  const value = parseInt(e.target.value, 10);
+  $volumeValue.textContent = value;
+  Tone.Destination.volume.set({ value });
+});
 
 // Quick Drum Synth Samples
 const kickDrum = new Tone.MembraneSynth({ volume: 2 }).toDestination();
 const snareDrum = new Tone.Player({
-  url: "./assets/s1/Snares/snare8.wav",
+  url: "./samples/snares/Cymatics x S1 - Snare 2.wav",
 }).toDestination();
 
 const tomtomDrum = new Tone.Player({
-  url: "./assets/s1/Percussion/percussion1.wav",
+  url: "./samples/percussion/Cymatics x S1 - Percussion 4.wav",
+  volume: 0.3,
 }).toDestination();
 
 const hihatCymbal = new Tone.Player({
-  url: "./assets/s1/Hihats/closed-hihat-1.wav",
+  url: "./samples/hihats/closed/Cymatics x S1 - Closed Hihat 4.wav",
 }).toDestination();
+
+const samples = {
+  row_0: hihatCymbal,
+  row_1: tomtomDrum,
+  row_2: snareDrum,
+  row_3: kickDrum,
+};
+
+const $keyboardKeys = Array.from($$(".key"));
+$keyboardKeys.forEach(($key) => {
+  $key.addEventListener("click", (e) => {
+    const row = $key.dataset.row;
+    playSample(samples[row], Tone.now());
+  });
+});
 
 const $playButton = $(".play-btn");
 const $stopButton = $(".stop-btn");
 const $clearButton = $(".clear-btn");
+const $muteButton = $(".mute-btn");
+
+$muteButton.addEventListener("click", () => {
+  if (!Tone.Destination.mute) {
+    $muteButton.textContent = "Unmute";
+    Tone.Destination.mute = true;
+  } else {
+    $muteButton.textContent = "Mute";
+    Tone.Destination.mute = false;
+  }
+});
 
 /**
  * @param {number?} count
@@ -61,32 +111,16 @@ const $clearButton = $(".clear-btn");
 function createEmptyLoop(count = 8, initialValue = null) {
   return new Array(count).fill(initialValue);
 }
-const kickLoop = createEmptyLoop();
-const snareLoop = createEmptyLoop();
-const tomtomLoop = createEmptyLoop();
-const hihatLoop = createEmptyLoop();
+
+let kickLoop = createEmptyLoop();
+let snareLoop = createEmptyLoop();
+let tomtomLoop = createEmptyLoop();
+let hihatLoop = createEmptyLoop();
 
 let kickSeq;
 let snareSeq;
 let hihatSeq;
 let tomtomSeq;
-
-// const sequences = {
-//   row_1: null,
-//   row_2: null,
-//   row_3: null,
-//   row_4: null,
-// };
-
-// /**
-//  * @param {Tone.Source} sample
-//  * @param {Array<(string|null)>} loop
-//  */
-// function createSequence(sample, loop) {
-//   return new Tone.Sequence((time, note) => {
-//     playSample(sample, time, note);
-//   }, loop);
-// }
 
 $playButton.addEventListener("click", async () => {
   console.log("context:", Tone.context.state);
@@ -167,11 +201,31 @@ $clearButton.addEventListener("click", () => {
       cell.removeChild(cell.lastElementChild);
     }
   });
-  resetLoops(); //TODO:
+  resetLoops();
 });
 
+//TODO: get rid of globals
 function resetLoops() {
-  console.log("NOT YET IMPLEMENTED!");
+  kickLoop = createEmptyLoop();
+  snareLoop = createEmptyLoop();
+  tomtomLoop = createEmptyLoop();
+  hihatLoop = createEmptyLoop();
+
+  if (kickSeq) {
+    kickSeq.dispose();
+  }
+
+  if (snareSeq) {
+    snareSeq.dispose();
+  }
+
+  if (hihatSeq) {
+    hihatSeq.dispose();
+  }
+
+  if (tomtomSeq) {
+    tomtomSeq.dispose();
+  }
 }
 
 /**
