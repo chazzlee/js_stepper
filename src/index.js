@@ -25,7 +25,13 @@ $("#sequencer-container").addEventListener("contextmenu", (e) => {
   return false;
 });
 
-// Quick Drum Synth Samples
+const config = {
+  ROW_SIZE: 5,
+  COL_SIZE: 16,
+  DEFAULT_NOTES: ["openhat", "closedhat", "percussion", "snare", "kick"],
+};
+
+// Quick Drum Synth Samples ----TODO: move
 const metronome = new Tone.MembraneSynth({ volume: -8 }).toDestination();
 const kickDrum = new Tone.MembraneSynth({ volume: 0.3 }).toDestination();
 const snareDrum = new Tone.Player({
@@ -42,29 +48,14 @@ const openhatCymbal = new Tone.Player({
   url: "./samples/hihats/open/Cymatics x S1 - Open Hihat 3.wav",
 }).toDestination();
 
-//TODO:
-// const sources = configureSources(metronome);
-// sources
-//   .add(openhatCymbal)
-//   .add(hihatCymbal)
-//   .add(percussionDrum)
-//   .add(snareDrum)
-//   .add(kickDrum)
-//   .build();
-
-const samples = {
-  row_0: { key: "openhat", label: "Open Hi Hat", source: openhatCymbal },
-  row_1: { key: "closedhat", label: "Closed Hi Hat", source: hihatCymbal },
-  row_2: { key: "percussion", label: "Percussion", source: percussionDrum },
-  row_3: { key: "snare", label: "Snare", source: snareDrum },
-  row_4: { key: "kick", label: "Kick", source: kickDrum },
-};
-
-const config = {
-  ROW_SIZE: 5,
-  COL_SIZE: 16,
-  DEFAULT_NOTES: ["openhat", "closedhat", "percussion", "snare", "kick"],
-};
+const sourceBuilder = configureSources(config.ROW_SIZE)
+  .add({ name: "openhat", label: "Open Hi Hat", source: openhatCymbal })
+  .add({ name: "closedhat", label: "Closed Hi Hat", source: hihatCymbal })
+  .add({ name: "percussion", label: "Percussion", source: percussionDrum })
+  .add({ name: "snare", label: "Snare", source: snareDrum })
+  .add({ name: "kick", label: "Kick", source: kickDrum });
+const keyboardSamples = sourceBuilder.generateKeyboardSamples();
+const sources = sourceBuilder.build();
 
 initializeBpm();
 initializeVolume();
@@ -73,7 +64,7 @@ initializeMetronome();
 initializeClearButton(resetLoops);
 initializeStopButton();
 // initializePlayButton(isMetronomeOn);
-buildKeyboard(samples, config.ROW_SIZE);
+buildKeyboard(keyboardSamples, config.ROW_SIZE);
 buildGrid(config.ROW_SIZE, config.COL_SIZE, config.DEFAULT_NOTES);
 
 /**
