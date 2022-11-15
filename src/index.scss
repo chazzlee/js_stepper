@@ -16,8 +16,8 @@
   height: 400px;
   width: 400px;
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: repeat(8, 1fr);
 }
 
 .cell {
@@ -26,7 +26,7 @@
   cursor: pointer;
 }
 
-.marker { 
+.marker {
   background-color: rgb(82, 136, 194);
   width: 100%;
   height: 100%;

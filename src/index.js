@@ -4,7 +4,7 @@ module.hot.accept();
 
 /**
  * @param {string} selector
- * @returns HTMLElement|null
+ * @returns {(HTMLElement|null)}
  */
 function $(selector) {
   let symbol = selector[0];
@@ -16,7 +16,7 @@ function $(selector) {
 
 /**
  * @param {string} selector
- * @returns NodeListOf<Element>
+ * @returns {NodeListOf<Element>}
  */
 function $$(selector) {
   return document.querySelectorAll(selector);
@@ -32,6 +32,8 @@ $("#sequencer-container").addEventListener("contextmenu", (e) => {
   e.preventDefault();
   return false;
 });
+
+console.log(Tone.Transport.bpm.value);
 
 // Quick Drum Synth Samples
 const kickDrum = new Tone.MembraneSynth({ volume: 2 }).toDestination();
@@ -50,20 +52,49 @@ const hihatCymbal = new Tone.Player({
 const $playButton = $(".play-btn");
 const $stopButton = $(".stop-btn");
 const $clearButton = $(".clear-btn");
-console.log(Tone.Transport.bpm.value);
 
-const kickLoop = new Array(4).fill(null);
-const snareLoop = new Array(4).fill(null);
-const tomtomLoop = new Array(4).fill(null);
-const hihatLoop = new Array(4).fill(null);
+/**
+ * @param {number?} count
+ * @param {T?} initialValue
+ * @returns {Array<T>}
+ */
+function createEmptyLoop(count = 8, initialValue = null) {
+  return new Array(count).fill(initialValue);
+}
+const kickLoop = createEmptyLoop();
+const snareLoop = createEmptyLoop();
+const tomtomLoop = createEmptyLoop();
+const hihatLoop = createEmptyLoop();
 
 let kickSeq;
 let snareSeq;
 let hihatSeq;
 let tomtomSeq;
-$playButton.addEventListener("click", () => {
+
+// const sequences = {
+//   row_1: null,
+//   row_2: null,
+//   row_3: null,
+//   row_4: null,
+// };
+
+// /**
+//  * @param {Tone.Source} sample
+//  * @param {Array<(string|null)>} loop
+//  */
+// function createSequence(sample, loop) {
+//   return new Tone.Sequence((time, note) => {
+//     playSample(sample, time, note);
+//   }, loop);
+// }
+
+$playButton.addEventListener("click", async () => {
   console.log("context:", Tone.context.state);
-  console.log("transport:", Tone.context.state);
+  console.log("transport:", Tone.Transport.state);
+  if (Tone.context.state !== "running") {
+    await Tone.start();
+    console.log("context after:", Tone.context.state);
+  }
 
   if (kickSeq) {
     kickSeq.dispose();
@@ -81,9 +112,24 @@ $playButton.addEventListener("click", () => {
     tomtomSeq.dispose();
   }
 
+  kickSeq = new Tone.Sequence((time, note) => {
+    playSample(kickDrum, time, note);
+  }, kickLoop);
+
+  snareSeq = new Tone.Sequence((time, note) => {
+    playSample(snareDrum, time, note);
+  }, snareLoop);
+
+  hihatSeq = new Tone.Sequence((time, note) => {
+    playSample(hihatCymbal, time, note);
+  }, hihatLoop);
+
+  tomtomSeq = new Tone.Sequence((time, note) => {
+    playSample(tomtomDrum, time, note);
+  }, tomtomLoop);
+
   if (Tone.Transport.state === "paused" || Tone.Transport.state === "stopped") {
     console.log("context:", Tone.context.state);
-    // createSequences();
 
     kickSeq = new Tone.Sequence((time, note) => {
       playSample(kickDrum, time, note);
@@ -121,7 +167,7 @@ $clearButton.addEventListener("click", () => {
       cell.removeChild(cell.lastElementChild);
     }
   });
-  resetLoops();
+  resetLoops(); //TODO:
 });
 
 function resetLoops() {
@@ -143,7 +189,7 @@ function playSample(sample, time, note = "C2") {
 
 /**
  * @param {Tone.Source} sample
- * @param {} options
+ * @param {} options //TODO:
  * @returns {void}
  */
 function handleNotePress(sample, options) {
