@@ -1,26 +1,18 @@
 import * as Tone from "tone";
+import { $, $$ } from "./app/utils";
+
+import { buildGrid } from "./app/components/grid";
+import { buildKeyboard } from "./app/components/keyboard";
+import { initializeBpm } from "./app/components/bpm";
+import { initializeVolume } from "./app/components/volume";
+import { initializeMuteButton } from "./app/components/muteButton";
+import { initializeMetronome, isMetronomeOn } from "./app/components/metronome";
+import { initializeClearButton } from "./app/components/clearButton";
+import { initializeStopButton } from "./app/components/stopButton";
+import { configureSources } from "./app/audio/sources";
+// import { initializePlayButton } from "./app/components/playButton";
 
 module.hot.accept();
-
-/**
- * @param {string} selector
- * @returns {(HTMLElement|null)}
- */
-function $(selector) {
-  let symbol = selector[0];
-  if (symbol === "#") {
-    return document.getElementById(selector.slice(1));
-  }
-  return document.querySelector(selector);
-}
-
-/**
- * @param {string} selector
- * @returns {NodeListOf<Element>}
- */
-function $$(selector) {
-  return document.querySelectorAll(selector);
-}
 
 $("#context").addEventListener("click", async () => {
   console.log("context status: ", Tone.context.state);
@@ -33,57 +25,16 @@ $("#sequencer-container").addEventListener("contextmenu", (e) => {
   return false;
 });
 
-const $bpmValue = $("#bpm-value");
-const $bpmSlider = $("#bpm-slider");
-$bpmValue.textContent = Tone.Transport.bpm.value;
-$bpmSlider.value = Tone.Transport.bpm.value;
-
-$bpmSlider.addEventListener("input", (e) => {
-  const value = parseInt(e.target.value, 10);
-  $bpmValue.textContent = value;
-  Tone.Transport.bpm.set({
-    value,
-  });
-});
-
-Tone.Destination.volume.set({ value: -15 });
-
-const $volumeValue = $("#volume-value");
-const $volumeSlider = $("#volume-slider");
-$volumeValue.textContent = Math.floor(Tone.Destination.volume.value);
-$volumeSlider.value = Math.floor(Tone.Destination.volume.value);
-$volumeSlider.addEventListener("input", (e) => {
-  const value = parseInt(e.target.value, 10);
-  $volumeValue.textContent = value;
-  Tone.Destination.volume.set({ value });
-});
-
-let isMetronomeOn = true;
-const $metronome = $(".metronome-btn");
-const $metronomeStatus = $("#metronome-status");
-$metronomeStatus.textContent = isMetronomeOn ? "on" : "off";
-$metronome.addEventListener("click", () => {
-  if (isMetronomeOn) {
-    isMetronomeOn = false;
-    $metronomeStatus.textContent = "off";
-  } else {
-    isMetronomeOn = true;
-    $metronomeStatus.textContent = "on";
-  }
-});
-
 // Quick Drum Synth Samples
-const metronome = new Tone.MembraneSynth({ volume: 2 }).toDestination();
-const kickDrum = new Tone.MembraneSynth({ volume: 2 }).toDestination();
+const metronome = new Tone.MembraneSynth({ volume: -8 }).toDestination();
+const kickDrum = new Tone.MembraneSynth({ volume: 0.3 }).toDestination();
 const snareDrum = new Tone.Player({
   url: "./samples/snares/Cymatics x S1 - Snare 2.wav",
 }).toDestination();
-
-const tomtomDrum = new Tone.Player({
+const percussionDrum = new Tone.Player({
   url: "./samples/percussion/Cymatics x S1 - Percussion 4.wav",
   volume: 0.3,
 }).toDestination();
-
 const hihatCymbal = new Tone.Player({
   url: "./samples/hihats/closed/Cymatics x S1 - Closed Hihat 4.wav",
 }).toDestination();
@@ -91,59 +42,63 @@ const openhatCymbal = new Tone.Player({
   url: "./samples/hihats/open/Cymatics x S1 - Open Hihat 3.wav",
 }).toDestination();
 
+//TODO:
+// const sources = configureSources(metronome);
+// sources
+//   .add(openhatCymbal)
+//   .add(hihatCymbal)
+//   .add(percussionDrum)
+//   .add(snareDrum)
+//   .add(kickDrum)
+//   .build();
+
 const samples = {
-  row_0: openhatCymbal,
-  row_1: hihatCymbal,
-  row_2: tomtomDrum,
-  row_3: snareDrum,
-  row_4: kickDrum,
+  row_0: { key: "openhat", label: "Open Hi Hat", source: openhatCymbal },
+  row_1: { key: "closedhat", label: "Closed Hi Hat", source: hihatCymbal },
+  row_2: { key: "percussion", label: "Percussion", source: percussionDrum },
+  row_3: { key: "snare", label: "Snare", source: snareDrum },
+  row_4: { key: "kick", label: "Kick", source: kickDrum },
 };
 
-const $keyboardKeys = Array.from($$(".key"));
-$keyboardKeys.forEach(($key) => {
-  $key.addEventListener("click", (e) => {
-    const row = $key.dataset.row;
-    playSample(samples[row], Tone.now());
-  });
-});
+const config = {
+  ROW_SIZE: 5,
+  COL_SIZE: 16,
+  DEFAULT_NOTES: ["openhat", "closedhat", "percussion", "snare", "kick"],
+};
 
-const $playButton = $(".play-btn");
-const $stopButton = $(".stop-btn");
-const $clearButton = $(".clear-btn");
-const $muteButton = $(".mute-btn");
-
-$muteButton.addEventListener("click", () => {
-  if (!Tone.Destination.mute) {
-    $muteButton.textContent = "Unmute";
-    Tone.Destination.mute = true;
-  } else {
-    $muteButton.textContent = "Mute";
-    Tone.Destination.mute = false;
-  }
-});
+initializeBpm();
+initializeVolume();
+initializeMuteButton();
+initializeMetronome();
+initializeClearButton(resetLoops);
+initializeStopButton();
+// initializePlayButton(isMetronomeOn);
+buildKeyboard(samples, config.ROW_SIZE);
+buildGrid(config.ROW_SIZE, config.COL_SIZE, config.DEFAULT_NOTES);
 
 /**
  * @param {number?} count
  * @param {T?} initialValue
  * @returns {Array<T>}
  */
-function createEmptyLoop(count = 8, initialValue = null) {
+function createEmptyLoop(count = config.COL_SIZE, initialValue = null) {
   return new Array(count).fill(initialValue);
 }
 
 let kickLoop = createEmptyLoop();
 let snareLoop = createEmptyLoop();
-let tomtomLoop = createEmptyLoop();
+let percussionLoop = createEmptyLoop();
 let hihatLoop = createEmptyLoop();
 let openhatLoop = createEmptyLoop();
 
 let kickSeq;
 let snareSeq;
 let hihatSeq;
-let tomtomSeq;
+let percussionSeq;
 let openhatSeq;
 let metronomeSeq;
 
+const $playButton = $(".play-btn");
 $playButton.addEventListener("click", async () => {
   console.log("context:", Tone.context.state);
   console.log("transport:", Tone.Transport.state);
@@ -172,13 +127,13 @@ $playButton.addEventListener("click", async () => {
     openhatSeq.dispose();
   }
 
-  if (tomtomSeq) {
-    tomtomSeq.dispose();
+  if (percussionSeq) {
+    percussionSeq.dispose();
   }
 
   if (Tone.Transport.state === "paused" || Tone.Transport.state === "stopped") {
     console.log("context:", Tone.context.state);
-
+    const $stopButton = $(".stop-btn");
     kickSeq = new Tone.Sequence((time, note) => {
       playSample(kickDrum, time, note);
     }, kickLoop).start(0);
@@ -195,9 +150,9 @@ $playButton.addEventListener("click", async () => {
       playSample(openhatCymbal, time, note);
     }, openhatLoop).start(0);
 
-    tomtomSeq = new Tone.Sequence((time, note) => {
-      playSample(tomtomDrum, time, note);
-    }, tomtomLoop).start(0);
+    percussionSeq = new Tone.Sequence((time, note) => {
+      playSample(percussionDrum, time, note);
+    }, percussionLoop).start(0);
 
     if (isMetronomeOn) {
       metronomeSeq = new Tone.Sequence(
@@ -221,30 +176,12 @@ $playButton.addEventListener("click", async () => {
     console.log("transport:", Tone.context.state);
   }
 });
-$stopButton.addEventListener("click", () => {
-  if (Tone.Transport.state === "started") {
-    Tone.Transport.stop();
-    console.log("Transport stopped...");
-    // TODO: is this paused or stopped/reset?
-    $playButton.disabled = false;
-    $stopButton.disabled = true;
-  }
-});
-$clearButton.addEventListener("click", () => {
-  const grid = $("#grid");
-  Array.from(grid.children).forEach((cell) => {
-    if (cell.hasChildNodes()) {
-      cell.removeChild(cell.lastElementChild);
-    }
-  });
-  resetLoops();
-});
 
 //TODO: get rid of globals
 function resetLoops() {
   kickLoop = createEmptyLoop();
   snareLoop = createEmptyLoop();
-  tomtomLoop = createEmptyLoop();
+  percussionLoop = createEmptyLoop();
   hihatLoop = createEmptyLoop();
   openhatLoop = createEmptyLoop();
 
@@ -264,8 +201,8 @@ function resetLoops() {
     openhatSeq.dispose();
   }
 
-  if (tomtomSeq) {
-    tomtomSeq.dispose();
+  if (percussionSeq) {
+    percussionSeq.dispose();
   }
 }
 
@@ -298,11 +235,9 @@ function handleNotePress(sample, options) {
     if (!options.element.childElementCount) {
       options.loop[col] = "C2";
       console.log(options.element.dataset.note, options.loop);
-
       const marker = document.createElement("div");
       marker.classList.add("marker");
       options.element.append(marker);
-
       //TODO: restart the loop while it's running if user adds another marker
       // if (Tone.Transport.state === "started") {
       //   Tone.Transport.stop();
@@ -340,18 +275,18 @@ Array.from($snareDrums).forEach(($snare) => {
   );
 });
 
-const $tomtomDrums = $$("[data-note='tomtom']");
-Array.from($tomtomDrums).forEach(($tomtom) => {
-  $tomtom.addEventListener("mousedown", (e) =>
-    handleNotePress(tomtomDrum, {
+const $percussionDrums = $$("[data-note='percussion']");
+Array.from($percussionDrums).forEach(($percussion) => {
+  $percussion.addEventListener("mousedown", (e) =>
+    handleNotePress(percussionDrum, {
       button: e.button,
-      element: $tomtom,
-      loop: tomtomLoop,
+      element: $percussion,
+      loop: percussionLoop,
     })
   );
 });
 
-const $hihatCymbals = $$("[data-note='hihat']");
+const $hihatCymbals = $$("[data-note='closedhat']");
 Array.from($hihatCymbals).forEach(($hihat) => {
   $hihat.addEventListener("mousedown", (e) =>
     handleNotePress(hihatCymbal, {
