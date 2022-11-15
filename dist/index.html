@@ -20,10 +20,14 @@
             <button class="btn play-btn">Play</button>
           </div>
           <div>
-            <button class="btn stop-btn" disabled>Stop</button>
+            <button class="btn stop-btn" disabled="true">Stop</button>
           </div>
           <div>
             <button class="btn clear-btn">Clear</button>
+          </div>
+          <div>
+            <button class="btn metronome-btn">Metronome</button>
+            <span id="metronome-status"></span>
           </div>
           <div class="bpm-container">
             BPM: <span id="bpm-value"></span>
@@ -53,7 +57,9 @@
         </div>
         <div id="sequencer-container">
           <div id="sequencer">
-            <div id="playhead"></div>
+            <div id="playhead">
+              <div id="playhead-marker"></div>
+            </div>
             <div id="keyboard">
               <div class="key" data-note="" data-row="row_0">
                 <p>Open Hi Hat</p>

@@ -58,7 +58,22 @@ $volumeSlider.addEventListener("input", (e) => {
   Tone.Destination.volume.set({ value });
 });
 
+let isMetronomeOn = true;
+const $metronome = $(".metronome-btn");
+const $metronomeStatus = $("#metronome-status");
+$metronomeStatus.textContent = isMetronomeOn ? "on" : "off";
+$metronome.addEventListener("click", () => {
+  if (isMetronomeOn) {
+    isMetronomeOn = false;
+    $metronomeStatus.textContent = "off";
+  } else {
+    isMetronomeOn = true;
+    $metronomeStatus.textContent = "on";
+  }
+});
+
 // Quick Drum Synth Samples
+const metronome = new Tone.MembraneSynth({ volume: 2 }).toDestination();
 const kickDrum = new Tone.MembraneSynth({ volume: 2 }).toDestination();
 const snareDrum = new Tone.Player({
   url: "./samples/snares/Cymatics x S1 - Snare 2.wav",
@@ -127,6 +142,7 @@ let snareSeq;
 let hihatSeq;
 let tomtomSeq;
 let openhatSeq;
+let metronomeSeq;
 
 $playButton.addEventListener("click", async () => {
   console.log("context:", Tone.context.state);
@@ -134,6 +150,10 @@ $playButton.addEventListener("click", async () => {
   if (Tone.context.state !== "running") {
     await Tone.start();
     console.log("context after:", Tone.context.state);
+  }
+
+  if (metronomeSeq) {
+    metronomeSeq.dispose();
   }
 
   if (kickSeq) {
@@ -179,9 +199,23 @@ $playButton.addEventListener("click", async () => {
       playSample(tomtomDrum, time, note);
     }, tomtomLoop).start(0);
 
+    if (isMetronomeOn) {
+      metronomeSeq = new Tone.Sequence(
+        (time, note) => {
+          playSample(metronome, time, note, "8n");
+        },
+        ["C5", null, "C5", null, "C5", null, "C5", null]
+      ).start(0);
+    }
+    // Tone.Draw.schedule(() => {}, Tone.now()).start(0);
+
     Tone.Transport.start();
+
     $playButton.disabled = true;
     $stopButton.disabled = false;
+    // const $playheadMarker = $("#playhead-marker");
+    // $playheadMarker.classList.add("playing");
+
     console.log("Transport started...");
     console.log("context:", Tone.context.state);
     console.log("transport:", Tone.context.state);
@@ -237,9 +271,12 @@ function resetLoops() {
 
 /**
  * @param {Tone.Source} sample
+ * @param {number} time
+ * @param {string?} note
+ * @param {string?} duration
  * @returns {void}
  */
-function playSample(sample, time, note = "C2") {
+function playSample(sample, time, note = "C2", duration = "4n") {
   console.log("playing sample...");
   if (sample instanceof Tone.Player) {
     sample.start(time);
