@@ -11,6 +11,7 @@ import { initializeClearButton } from "./app/components/clearButton";
 import { initializeStopButton } from "./app/components/stopButton";
 import { configureSources } from "./app/audio/sources";
 // import { initializePlayButton } from "./app/components/playButton";
+import { samplePack2 } from "./app/utils/defaultSamples";
 
 module.hot.accept();
 
@@ -32,28 +33,29 @@ const config = {
 };
 
 // Quick Drum Synth Samples ----TODO: move
+/**
+ * @param {object} samplePack //todo:
+ * @returns {Object.<string, Tone.Player>}
+ */
+const generateDefaultPlayers = (samplePack) => {
+  const players = {};
+  for (let sample of Object.keys(samplePack)) {
+    players[sample] = new Tone.Player({
+      url: samplePack[sample],
+    }).toDestination();
+  }
+  return players;
+};
+
+const players = generateDefaultPlayers(samplePack2);
 const metronome = new Tone.MembraneSynth({ volume: -8 }).toDestination();
-const kickDrum = new Tone.MembraneSynth({ volume: 0.3 }).toDestination();
-const snareDrum = new Tone.Player({
-  url: "./samples/snares/Cymatics x S1 - Snare 2.wav",
-}).toDestination();
-const percussionDrum = new Tone.Player({
-  url: "./samples/percussion/Cymatics x S1 - Percussion 4.wav",
-  volume: 0.3,
-}).toDestination();
-const hihatCymbal = new Tone.Player({
-  url: "./samples/hihats/closed/Cymatics x S1 - Closed Hihat 4.wav",
-}).toDestination();
-const openhatCymbal = new Tone.Player({
-  url: "./samples/hihats/open/Cymatics x S1 - Open Hihat 3.wav",
-}).toDestination();
 
 const sourceBuilder = configureSources(config.ROW_SIZE)
-  .add({ name: "openhat", label: "Open Hi Hat", source: openhatCymbal })
-  .add({ name: "closedhat", label: "Closed Hi Hat", source: hihatCymbal })
-  .add({ name: "percussion", label: "Percussion", source: percussionDrum })
-  .add({ name: "snare", label: "Snare", source: snareDrum })
-  .add({ name: "kick", label: "Kick", source: kickDrum });
+  .add({ name: "openhat", label: "Open Hi Hat", source: players.openHat })
+  .add({ name: "closedhat", label: "Closed Hi Hat", source: players.closedHat })
+  .add({ name: "percussion", label: "Percussion", source: players.percussion })
+  .add({ name: "snare", label: "Snare", source: players.snare })
+  .add({ name: "kick", label: "Kick", source: players.kick });
 const keyboardSamples = sourceBuilder.generateKeyboardSamples();
 const sources = sourceBuilder.build();
 
@@ -93,6 +95,7 @@ const $playButton = $(".play-btn");
 $playButton.addEventListener("click", async () => {
   console.log("context:", Tone.context.state);
   console.log("transport:", Tone.Transport.state);
+
   if (Tone.context.state !== "running") {
     await Tone.start();
     console.log("context after:", Tone.context.state);
@@ -126,31 +129,48 @@ $playButton.addEventListener("click", async () => {
     console.log("context:", Tone.context.state);
     const $stopButton = $(".stop-btn");
     kickSeq = new Tone.Sequence((time, note) => {
-      playSample(kickDrum, time, note);
+      playSample(players.kick, time, note);
     }, kickLoop).start(0);
 
     snareSeq = new Tone.Sequence((time, note) => {
-      playSample(snareDrum, time, note);
+      playSample(players.snare, time, note);
     }, snareLoop).start(0);
 
     hihatSeq = new Tone.Sequence((time, note) => {
-      playSample(hihatCymbal, time, note);
+      playSample(players.closedHat, time, note);
     }, hihatLoop).start(0);
 
     openhatSeq = new Tone.Sequence((time, note) => {
-      playSample(openhatCymbal, time, note);
+      playSample(players.openHat, time, note);
     }, openhatLoop).start(0);
 
     percussionSeq = new Tone.Sequence((time, note) => {
-      playSample(percussionDrum, time, note);
+      playSample(players.percussion, time, note);
     }, percussionLoop).start(0);
 
     if (isMetronomeOn) {
       metronomeSeq = new Tone.Sequence(
         (time, note) => {
-          playSample(metronome, time, note, "8n");
+          playSample(metronome, time, note, "4n");
         },
-        ["C5", null, "C5", null, "C5", null, "C5", null]
+        [
+          "C5",
+          null,
+          null,
+          null,
+          "C5",
+          null,
+          null,
+          null,
+          "C5",
+          null,
+          null,
+          null,
+          "C5",
+          null,
+          null,
+          null,
+        ]
       ).start(0);
     }
     // Tone.Draw.schedule(() => {}, Tone.now()).start(0);
@@ -195,6 +215,10 @@ function resetLoops() {
   if (percussionSeq) {
     percussionSeq.dispose();
   }
+
+  Tone.Transport.stop();
+  $(".stop-btn").disabled = true;
+  $(".play-btn").disabled = false;
 }
 
 /**
@@ -247,7 +271,7 @@ function handleNotePress(sample, options) {
 const $kickDrums = $$("[data-note='kick']");
 Array.from($kickDrums).forEach(($kick) => {
   $kick.addEventListener("mousedown", (e) => {
-    handleNotePress(kickDrum, {
+    handleNotePress(players.kick, {
       button: e.button,
       element: $kick,
       loop: kickLoop,
@@ -258,7 +282,7 @@ Array.from($kickDrums).forEach(($kick) => {
 const $snareDrums = $$("[data-note='snare']");
 Array.from($snareDrums).forEach(($snare) => {
   $snare.addEventListener("mousedown", (e) =>
-    handleNotePress(snareDrum, {
+    handleNotePress(players.snare, {
       button: e.button,
       element: $snare,
       loop: snareLoop,
@@ -269,7 +293,7 @@ Array.from($snareDrums).forEach(($snare) => {
 const $percussionDrums = $$("[data-note='percussion']");
 Array.from($percussionDrums).forEach(($percussion) => {
   $percussion.addEventListener("mousedown", (e) =>
-    handleNotePress(percussionDrum, {
+    handleNotePress(players.percussion, {
       button: e.button,
       element: $percussion,
       loop: percussionLoop,
@@ -280,7 +304,7 @@ Array.from($percussionDrums).forEach(($percussion) => {
 const $hihatCymbals = $$("[data-note='closedhat']");
 Array.from($hihatCymbals).forEach(($hihat) => {
   $hihat.addEventListener("mousedown", (e) =>
-    handleNotePress(hihatCymbal, {
+    handleNotePress(players.closedHat, {
       button: e.button,
       element: $hihat,
       loop: hihatLoop,
@@ -291,7 +315,7 @@ Array.from($hihatCymbals).forEach(($hihat) => {
 const $openhatCymbals = $$("[data-note='openhat']");
 Array.from($openhatCymbals).forEach(($openhat) => {
   $openhat.addEventListener("mousedown", (e) =>
-    handleNotePress(openhatCymbal, {
+    handleNotePress(players.openHat, {
       button: e.button,
       element: $openhat,
       loop: openhatLoop,
