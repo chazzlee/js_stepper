@@ -139,75 +139,117 @@ button {
 /*!*************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/index.scss ***!
   \*************************************************************************************************************************************/
-#sequencer-container {
+body {
+  font-family: "Sono";
+}
+
+#app {
+  background-color: rgb(38, 38, 56);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.nav-header {
+  height: 45px;
+  background-color: #fff;
+  margin-bottom: 200px;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+  height: 100%;
+  padding: 0px 50px;
+}
+
+.icon-svg {
+  height: 1.2rem;
+  width: 1.2rem;
+  margin-right: 4px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 6px 12px;
+  font-weight: 600;
+}
+.sequencer-toolbar {
+  height: 60px;
+  outline: 1px solid white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 12px;
+}
+
+.clock-container {
+  font-size: 28px;
+  color: #fff;
+}
+
+.slider-container {
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: large;
+}
+
+.slider {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-#sequencer {
+.slider-label {
+  margin-right: 4px;
+}
+
+.sequencer-container {
   display: flex;
-  position: relative;
 }
 
-#playhead {
+.sequencer-side-keyboard {
+  height: 300px;
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: 125px;
+}
+
+.sequencer-grid {
   width: 100%;
-  height: 10px;
-  background-color: rgb(136, 136, 136);
-  position: absolute;
-  top: -10px;
-}
-
-#playhead-marker {
-  position: absolute;
-  left: 100px;
-  top: 10px;
-  height: 200px;
-  width: 2px;
-  background-color: blue;
-}
-
-.playing {
-  transform: translateX(400px);
-  background-color: red;
-}
-
-#keyboard {
-  height: 200px;
-  width: 100px;
+  height: 300px;
   display: grid;
-  background-color: rgb(79, 122, 122);
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-columns: repeat(1, 1fr);
-}
-
-.key {
-  border: 0.5px solid rgb(141, 141, 141);
-  color: white;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-#grid {
-  height: 200px;
-  width: 400px;
-  display: grid;
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-rows: repeat(8, 1fr);
   grid-template-columns: repeat(16, 1fr);
 }
 
+.sequencer-footer {
+  outline: 1px solid white;
+  height: 60px;
+}
+
 .cell {
-  border: 0.5px solid rgb(141, 141, 141);
+  outline: 1px solid rgb(141, 141, 141);
   background-color: rgb(195, 202, 209);
   cursor: pointer;
 }
 
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(195, 202, 209);
+  outline: 1px solid rgb(141, 141, 141);
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .marker {
-  background-color: rgb(82, 136, 194);
+  background-color: rgb(157, 230, 202);
   width: 100%;
   height: 100%;
   cursor: pointer;
+  border-radius: 25%;
 }
