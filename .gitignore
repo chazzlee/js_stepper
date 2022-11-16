@@ -1,3 +1,5 @@
 node_modules/
 dump/
 samples/
+dist/samples/
+dist/assets/
