@@ -22,7 +22,7 @@
       <main class="container">
         <div class="sequencer-toolbar">
           <div class="toolbar-btn-group group-left">
-            <button class="btn btn-play">
+            <button id="btn-play" class="btn btn-play">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
@@ -36,7 +36,7 @@
               </svg>
               Play
             </button>
-            <button class="btn btn-stop">
+            <button id="btn-stop" class="btn btn-stop">
               <svg
                 class="icon-svg stop"
                 version="1.0"
@@ -59,8 +59,8 @@
           </div>
           <div class="bpm-container slider-container">
             <div class="slider">
-              <label id="bpm-value" class="slider-label">BPM: </label>
-              <p>120</p>
+              <label for="bpm-slider" class="slider-label">BPM: </label>
+              <p id="bpm-value">120</p>
             </div>
             <input
               type="range"
@@ -77,8 +77,8 @@
           </div>
           <div class="volume-container slider-container">
             <div class="slider">
-              <label id="volume-value" class="slider-label">Volume: </label>
-              <p>-15</p>
+              <label for="volume-slider" class="slider-label">Volume: </label>
+              <p id="volume-value">-15</p>
             </div>
             <input
               type="range"
@@ -90,27 +90,8 @@
               step="1"
             />
           </div>
-          <div class="btn-toolbar-group group-right">
-            <button class="btn btn-clear">
-              <svg
-                class="icon-svg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <g data-name="Refresh Time">
-                  <path
-                    d="M12 2a9.975 9.975 0 0 0-7 2.882V3a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H6.713A8 8 0 1 1 4 12a1 1 0 0 0-2 0A10 10 0 1 0 12 2z"
-                    style="fill: #1c1b1e"
-                  />
-                  <path
-                    d="m9.707 15.707 3-3A1 1 0 0 0 13 12V8a1 1 0 0 0-2 0v3.586l-2.707 2.707a1 1 0 1 0 1.414 1.414z"
-                    style="fill: #1c1b1e"
-                  />
-                </g>
-              </svg>
-              Clear
-            </button>
-            <button class="btn btn-mute" type="button">
+          <div class="toolbar-btn-group group-right">
+            <button id="btn-mute" class="btn btn-mute" type="button">
               <svg
                 class="icon-svg"
                 version="1.1"
@@ -130,7 +111,45 @@
                   d="M11.926 21.972a.995.995 0 0 1-.405-.086l-1.303-.58H7a1 1 0 0 1-1-1v-8.613a1 1 0 0 1 1-1h3.218l10.376-4.607A1 1 0 0 1 22 7v6.552a1 1 0 0 1-2 0V8.538l-9.165 4.07a1.002 1.002 0 0 1-.405.085H8v6.614h2.43a1 1 0 0 1 .405.086l1.498.665a1 1 0 0 1-.407 1.914z"
                 />
               </svg>
-              Mute
+              <span>Mute</span>
+            </button>
+            <button id="btn-unmute" class="btn btn-unmute hide" type="button">
+              <svg
+                class="icon-svg"
+                version="1.1"
+                id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg"
+                x="0"
+                y="0"
+                viewBox="0 0 32 32"
+                style="enable-background: new 0 0 32 32"
+                xml:space="preserve"
+              >
+                <style></style>
+                <path
+                  d="M20.813 26a1 1 0 0 1-.406-.086L10.03 21.307H6.813a1 1 0 0 1-1-1v-8.614a1 1 0 0 1 1-1h3.217l10.377-4.607A1 1 0 0 1 21.812 7v18a1 1 0 0 1-1 1zm-13-6.693h2.43c.139 0 .277.029.405.086l9.165 4.069V8.538l-9.165 4.07a1.002 1.002 0 0 1-.406.085h-2.43v6.614zM25.188 21.595a1 1 0 0 1-1-1v-9.453a1 1 0 0 1 2 0v9.453a1 1 0 0 1-1 1z"
+                />
+              </svg>
+              <span>Unmute</span>
+            </button>
+            <button id="btn-clear" class="btn btn-clear">
+              <svg
+                class="icon-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <g data-name="Refresh Time">
+                  <path
+                    d="M12 2a9.975 9.975 0 0 0-7 2.882V3a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H6.713A8 8 0 1 1 4 12a1 1 0 0 0-2 0A10 10 0 1 0 12 2z"
+                    style="fill: #1c1b1e"
+                  />
+                  <path
+                    d="m9.707 15.707 3-3A1 1 0 0 0 13 12V8a1 1 0 0 0-2 0v3.586l-2.707 2.707a1 1 0 1 0 1.414 1.414z"
+                    style="fill: #1c1b1e"
+                  />
+                </g>
+              </svg>
+              Clear
             </button>
           </div>
         </div>
