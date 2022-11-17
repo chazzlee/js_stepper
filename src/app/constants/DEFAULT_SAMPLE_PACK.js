@@ -56,7 +56,7 @@ export const DEFAULT_SAMPLE_PACK_2 = {
   3: {
     label: "Percussion 2",
     name: "percussion-2",
-    path: "./samples/perc2",
+    path: "./samples/perc2.wav",
   },
   4: {
     label: "Riff 1",

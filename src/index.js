@@ -1,6 +1,6 @@
 import * as Tone from "tone";
 import { $, $$ } from "./app/utils";
-import { DEFAULT_SAMPLE_PACK } from "./app/constants/DEFAULT_SAMPLE_PACK.js";
+import { DEFAULT_SAMPLE_PACK_2 } from "./app/constants/DEFAULT_SAMPLE_PACK.js";
 
 function setBpm(value) {
   const $bpmValue = $("#bpm-value");
@@ -34,7 +34,7 @@ function createPlayersFromSamples(samples) {
   );
 }
 
-const players = createPlayersFromSamples(DEFAULT_SAMPLE_PACK);
+const players = createPlayersFromSamples(DEFAULT_SAMPLE_PACK_2);
 const metronome = new Tone.MembraneSynth({
   volume: -12,
   envelope: { attack: 0.05, sustain: 0, release: 0.1 },
@@ -68,8 +68,8 @@ $metronomeToggle.addEventListener("change", (e) => {
 const $sideKeyboardContainer = $("#side-keyboard");
 const $sideKeyboardKeys = Array.from($sideKeyboardContainer.children);
 $sideKeyboardKeys.forEach(($key, index) => {
-  $key.textContent = DEFAULT_SAMPLE_PACK[index].label;
-  $key.dataset.name = DEFAULT_SAMPLE_PACK[index].name;
+  $key.textContent = DEFAULT_SAMPLE_PACK_2[index].label;
+  $key.dataset.name = DEFAULT_SAMPLE_PACK_2[index].name;
 
   $key.addEventListener("mousedown", () => {
     const now = Tone.now();
@@ -186,7 +186,7 @@ const RIGHT_BUTTON = 2;
 
 $cells.forEach(($cell) => {
   let [row, col] = extractPosition($cell.dataset.pos);
-  $cell.dataset.name = DEFAULT_SAMPLE_PACK[row].name;
+  $cell.dataset.name = DEFAULT_SAMPLE_PACK_2[row].name;
 
   $cell.addEventListener("mousedown", (e) => {
     if (e.button === LEFT_BUTTON) {
