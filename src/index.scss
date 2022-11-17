@@ -174,12 +174,14 @@ body {
 
 .sequencer-footer {
   outline: 2px solid $white;
-  height: 70px;
+  height: 90px;
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   color: $white;
+  padding-top: 4px;
+  padding-bottom: 4px;
   padding-left: 12px;
   padding-right: 12px;
   border-bottom-left-radius: 12px;
@@ -268,6 +270,10 @@ body {
   height: 100%;
   cursor: pointer;
   border-radius: 25%;
+  &:hover {
+    background-color: rgb(88, 188, 149);
+    transition: background-color 100ms ease-in;
+  }
 }
 
 .playhead {

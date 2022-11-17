@@ -41,7 +41,7 @@ export const DEFAULT_SAMPLE_PACK_2 = {
   0: {
     label: "Riff 1",
     name: "riff-1",
-    path: "assets/riff1.wav",
+    path: "assets/riff3.wav",
   },
   1: {
     label: "Riff 2",
