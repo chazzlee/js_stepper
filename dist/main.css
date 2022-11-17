@@ -181,16 +181,17 @@ body {
 }
 
 .sequencer-toolbar {
-  height: 60px;
+  height: 70px;
   outline: 1px solid white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 4px 12px;
+  margin-bottom: 14px;
 }
 
 .toolbar-btn-group {
-  min-width: 240px;
+  min-width: 280px;
 }
 
 .group-right {
@@ -200,6 +201,44 @@ body {
 .clock-container {
   font-size: 28px;
   color: #fff;
+}
+
+.metronome-container {
+  cursor: pointer;
+  background: #000;
+  width: 60px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 19px;
+  position: relative;
+  top: 2px;
+}
+
+.metronome-toggle {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.metronome-toggle:checked + .switch {
+  grid-template-columns: 1fr 1fr 0fr;
+}
+.metronome-toggle:checked + .switch::after {
+  background-color: #afddba;
+}
+
+.switch {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 0fr 1fr 1fr;
+  transition: 200ms;
+}
+.switch::after {
+  content: "";
+  border-radius: 50%;
+  background-color: #ccc;
+  grid-column: 2;
+  transition: background-color 200ms;
 }
 
 .slider-container {
@@ -227,8 +266,23 @@ body {
   justify-content: flex-end;
 }
 
+.measure-bar {
+  height: 100%;
+  display: flex;
+  color: #fff;
+  align-items: center;
+  font-size: small;
+  justify-content: flex-start;
+  margin-left: 121px;
+}
+.measure-bar > p {
+  margin-right: 126px;
+}
+
 .sequencer-container {
   display: flex;
+  position: relative;
+  outline: 1px solid #fff;
 }
 
 .sequencer-side-keyboard {
@@ -278,4 +332,38 @@ body {
   height: 100%;
   cursor: pointer;
   border-radius: 25%;
+}
+
+.playhead {
+  width: 100%;
+  height: 14px;
+  background-color: rgb(38, 38, 56);
+  outline: 1px solid white;
+  position: absolute;
+  top: -14px;
+}
+
+.playhead-marker {
+  position: absolute;
+  left: 125px;
+  height: 300px;
+  width: 2px;
+  background-color: blue;
+  visibility: hidden;
+}
+.playhead-marker.active {
+  background-color: rgb(223, 108, 108);
+  animation-name: move;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  visibility: visible;
+}
+
+@keyframes move {
+  from {
+    left: 125px;
+  }
+  to {
+    left: 1200px;
+  }
 }

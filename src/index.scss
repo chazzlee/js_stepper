@@ -1,13 +1,23 @@
 @import url("./styles/reset.scss");
 
-$white: #fff;
+$white: rgb(241, 239, 239);
+$primary-teal: rgb(108, 228, 182);
+$primary-dark: rgb(38, 38, 56);
+$yellow: rgb(241, 239, 115);
 
 body {
   font-family: "Sono";
 }
 
 #app {
-  background-color: rgb(38, 38, 56);
+  background-color: $primary-dark;
+  background: linear-gradient(
+    145deg,
+    rgba(108, 228, 182, 1) 6%,
+    rgba(38, 38, 56, 1) 18%,
+    rgba(38, 38, 56, 1) 84%,
+    rgba(108, 228, 182, 1) 100%
+  );
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -17,6 +27,11 @@ body {
   height: 45px;
   background-color: $white;
   margin-bottom: 200px;
+  display: flex;
+  font-size: large;
+  font-weight: 800;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -40,7 +55,7 @@ body {
   font-weight: 600;
 
   &:hover {
-    // transition: background-color ease-in 100ms;
+    //TODO:
   }
 }
 
@@ -50,7 +65,7 @@ body {
 
 .sequencer-toolbar {
   height: 70px;
-  outline: 1px solid white;
+  outline: 1px solid $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,7 +88,7 @@ body {
 
 .metronome-container {
   cursor: pointer;
-  background: #000;
+  background: rgb(48, 48, 48);
   width: 60px;
   height: 30px;
   padding: 4px;
@@ -92,7 +107,7 @@ body {
     + .switch {
       grid-template-columns: 1fr 1fr 0fr;
       &::after {
-        background-color: #afddba;
+        background-color: $primary-teal;
       }
     }
   }
@@ -106,7 +121,7 @@ body {
   &::after {
     content: "";
     border-radius: 50%;
-    background-color: #ccc;
+    background-color: $white;
     grid-column: 2;
     transition: background-color 200ms;
   }
@@ -135,6 +150,14 @@ body {
 
 .group-right {
   justify-content: flex-end;
+}
+
+.sequencer-footer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  color: $white;
 }
 
 .measure-bar {
@@ -176,13 +199,13 @@ body {
 }
 
 .sequencer-footer {
-  outline: 1px solid white;
+  outline: 1px solid $white;
   height: 60px;
 }
 
 .cell {
-  outline: 1px solid rgb(141, 141, 141);
-  background-color: rgb(195, 202, 209);
+  outline: 1px solid rgb(195, 202, 209, 0.4);
+  background-color: $primary-dark;
   cursor: pointer;
 }
 
@@ -190,20 +213,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(195, 202, 209);
+  background-color: $white;
   outline: 1px solid rgb(141, 141, 141);
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
 
   &:hover {
-    background-color: $white; //TODO:
+    background-color: $primary-dark; //TODO:
+    color: $white;
     transition: background-color ease-in 120ms;
   }
 }
 
 .marker {
-  background-color: rgb(157, 230, 202);
+  background-color: $primary-teal;
   width: 100%;
   height: 100%;
   cursor: pointer;
@@ -213,8 +237,8 @@ body {
 .playhead {
   width: 100%;
   height: 14px;
-  background-color: rgb(38, 38, 56);
-  outline: 1px solid white;
+  background-color: $primary-dark;
+  outline: 1px solid $white;
   position: absolute;
   top: -14px;
 }
@@ -224,11 +248,10 @@ body {
   left: 125px;
   height: 300px;
   width: 2px;
-  background-color: blue;
   visibility: hidden;
 
   &.active {
-    background-color: rgb(223, 108, 108);
+    background-color: $yellow;
     animation-name: move;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
