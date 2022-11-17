@@ -45,7 +45,6 @@ function setBpm(value) {
   $bpmValue.textContent = value;
 }
 
-//TODO: max min default start (ui)
 function setVolume(value) {
   const $volumeValue = $("#volume-value");
   $volumeValue.textContent = value;
@@ -127,12 +126,32 @@ function hasMarker($cell) {
   return $cell.hasChildNodes();
 }
 
+function convertBpmToSeconds(bpm) {
+  return `${(60_000 / bpm) * 4 * 2}ms`;
+}
+
+function formatClockTime(seconds) {
+  const date = new Date(null);
+  date.setSeconds(seconds);
+  console.log(date.toISOString());
+  return date.toISOString().substring(11, 19);
+}
+
 const metronomeLoop = ["C6", null, "C6", null, "C6", null, "C6", null];
+let clockInterval;
+
 function createLoopManager(players) {
   let loopers = players.map((_player) => createLooper());
   let sequences = {
     metronome: new Tone.Sequence((time, note) => {
       playNote(metronome, time, note, "4n");
+      Tone.Draw.schedule(() => {
+        const $playheadMarker = $(".playhead-marker");
+        $playheadMarker.classList.add("active");
+        $playheadMarker.style.animationDuration = convertBpmToSeconds(
+          Tone.Transport.bpm.value
+        );
+      }, time);
     }, metronomeLoop).start(0),
   };
 
@@ -158,7 +177,27 @@ function createLoopManager(players) {
       return sequences;
     },
     start() {
-      Tone.Transport.start();
+      if (Tone.Transport.state !== "started") {
+        this.createSequences();
+        Tone.Transport.start();
+        const $clock = $("#clock-value");
+        clockInterval = setInterval(() => {
+          $clock.textContent = formatClockTime(
+            Tone.Transport.getSecondsAtTime()
+          );
+        }, 1000);
+      }
+    },
+    stop() {
+      const $playheadMarker = $(".playhead-marker");
+      console.log($playheadMarker); //TODO: bug
+      $playheadMarker.style.animationDuration = 0;
+      $playheadMarker.classList.remove("active");
+      clearInterval(clockInterval);
+
+      const $clock = $("#clock-value");
+      $clock.textContent = "00:00:00";
+      Tone.Transport.stop();
     },
   };
 }
@@ -169,19 +208,10 @@ const $cells = Array.from($sequencerGrid.children);
 const loopManager = createLoopManager(players);
 
 const $playButton = $("#btn-play");
-$playButton.addEventListener("click", () => {
-  if (Tone.Transport.state !== "started") {
-    loopManager.createSequences();
-    loopManager.start();
-  }
-});
+$playButton.addEventListener("click", () => loopManager.start());
 
 const $stopButton = $("#btn-stop");
-$stopButton.addEventListener("click", () => {
-  if (Tone.Transport.state === "started") {
-    Tone.Transport.stop();
-  }
-});
+$stopButton.addEventListener("click", () => loopManager.stop());
 
 // Grid
 const LEFT_BUTTON = 0;

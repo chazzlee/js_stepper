@@ -49,12 +49,13 @@ body {
 }
 
 .sequencer-toolbar {
-  height: 60px;
+  height: 70px;
   outline: 1px solid white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 4px 12px;
+  margin-bottom: 14px;
 }
 
 .toolbar-btn-group {
@@ -136,11 +137,26 @@ body {
   justify-content: flex-end;
 }
 
+.measure-bar {
+  height: 100%;
+  display: flex;
+  color: $white;
+  align-items: center;
+  font-size: small;
+  justify-content: flex-start;
+  margin-left: 121px;
+  & > p {
+    margin-right: 126px;
+  }
+}
+
 .slider-control {
 }
 
 .sequencer-container {
   display: flex;
+  position: relative;
+  outline: 1px solid $white;
   // box-shadow: rgb(147, 178, 211) 0px 20px 30px -10px;
 }
 
@@ -194,88 +210,37 @@ body {
   border-radius: 25%;
 }
 
-// #sequencer-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
+.playhead {
+  width: 100%;
+  height: 14px;
+  background-color: rgb(38, 38, 56);
+  outline: 1px solid white;
+  position: absolute;
+  top: -14px;
+}
 
-// #sequencer {
-//   display: flex;
-//   position: relative;
-// }
+.playhead-marker {
+  position: absolute;
+  left: 125px;
+  height: 300px;
+  width: 2px;
+  background-color: blue;
+  visibility: hidden;
 
-// #playhead {
-//   width: 100%;
-//   height: 10px;
-//   background-color: rgb(136, 136, 136);
-//   position: absolute;
-//   top: -10px;
-// }
+  &.active {
+    background-color: rgb(223, 108, 108);
+    animation-name: move;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    visibility: visible;
+  }
+}
 
-// #playhead-marker {
-//   position: absolute;
-//   left: 100px;
-//   // left: 498px;
-//   top: 10px;
-//   height: 200px;
-//   width: 2px;
-//   background-color: blue;
-//   visibility: hidden;
-// }
-
-// #keyboard {
-//   height: 200px;
-//   width: 100px;
-//   display: grid;
-//   background-color: rgb(79, 122, 122);
-//   grid-template-rows: repeat(5, 1fr);
-//   grid-template-columns: repeat(1, 1fr);
-// }
-
-// .key {
-//   border: 0.5px solid rgb(141, 141, 141);
-//   color: white;
-//   font-size: 10px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   cursor: pointer;
-// }
-
-// #grid {
-//   height: 200px;
-//   width: 400px;
-//   display: grid;
-//   grid-template-rows: repeat(5, 1fr);
-//   grid-template-columns: repeat(16, 1fr);
-// }
-
-// .cell {
-//   border: 0.5px solid rgb(141, 141, 141);
-//   background-color: rgb(195, 202, 209);
-//   cursor: pointer;
-// }
-
-// .marker {
-//   background-color: rgb(82, 136, 194);
-//   width: 100%;
-//   height: 100%;
-//   cursor: pointer;
-// }
-
-// .active {
-//   background-color: rgb(223, 108, 108) !important;
-//   animation-name: move !important;
-//   animation-timing-function: linear !important;
-//   animation-iteration-count: infinite !important;
-//   visibility: visible !important;
-// }
-// @keyframes move {
-//   from {
-//     left: 100px;
-//   }
-//   to {
-//     left: 498px;
-//   }
-// }
+@keyframes move {
+  from {
+    left: 125px;
+  }
+  to {
+    left: 1200px;
+  }
+}

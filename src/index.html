@@ -87,7 +87,7 @@
             />
           </div>
           <div class="clock-container">
-            <p class="clock-value">0:00:00</p>
+            <p class="clock-value" id="clock-value">00:00:00</p>
           </div>
           <div class="volume-container slider-container">
             <div class="slider">
@@ -169,8 +169,18 @@
           </div>
         </div>
         <div class="sequencer-container" id="sequencer-container">
-          <div id="playhead">
-            <div id="playhead-marker"></div>
+          <div id="playhead" class="playhead">
+            <div class="measure-bar">
+              <p>1</p>
+              <p>2</p>
+              <p>3</p>
+              <p>4</p>
+              <p>1</p>
+              <p>2</p>
+              <p>3</p>
+              <p>4</p>
+            </div>
+            <div id="playhead-marker" class="playhead-marker"></div>
           </div>
           <div class="sequencer-side-keyboard" id="side-keyboard">
             <div class="key" data-row="row_0">Row 0</div>
