@@ -18,6 +18,11 @@ function bootstrap() {
     console.log("Audio is ready");
   });
 
+  $("#context-trigger").addEventListener("click", async () => {
+    await Tone.start();
+    console.log("Audio is ready");
+  });
+
   $("#sequencer-container").addEventListener("contextmenu", (e) => {
     e.preventDefault();
     return false;
@@ -100,7 +105,6 @@ function convertBpmToSeconds(bpm) {
 function formatClockTime(seconds) {
   const date = new Date(null);
   date.setSeconds(seconds);
-  console.log(date.toISOString());
   return date.toISOString().substring(11, 19);
 }
 

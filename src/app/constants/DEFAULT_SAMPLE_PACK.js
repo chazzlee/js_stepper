@@ -38,6 +38,16 @@ export const DEFAULT_SAMPLE_PACK = {
 };
 
 export const DEFAULT_SAMPLE_PACK_2 = {
+  2: {
+    label: "Riff 1",
+    name: "riff-1",
+    path: "assets/riff1.wav",
+  },
+  3: {
+    label: "Riff 2",
+    name: "riff-2",
+    path: "assets/riff2.wav",
+  },
   0: {
     label: "Open Hat 1",
     name: "openhat-1",
@@ -48,20 +58,10 @@ export const DEFAULT_SAMPLE_PACK_2 = {
     name: "closedhat-1",
     path: "assets/closedhat1.wav",
   },
-  2: {
+  4: {
     label: "Percussion 1",
     name: "percussion-1",
-    path: "assets/perc1.wav",
-  },
-  3: {
-    label: "Percussion 2",
-    name: "percussion-2",
     path: "assets/perc2.wav",
-  },
-  4: {
-    label: "Riff 1",
-    name: "riff-1",
-    path: "assets/riff1.wav",
   },
   5: {
     label: "Snare 1",
@@ -73,5 +73,5 @@ export const DEFAULT_SAMPLE_PACK_2 = {
     name: "snare-2",
     path: "assets/snare2.wav",
   },
-  7: { label: "Kick 1", name: "kick-1", path: "assets/kick.wav" },
+  7: { label: "Kick 1", name: "kick-1", path: "assets/kick1.wav" },
 };
