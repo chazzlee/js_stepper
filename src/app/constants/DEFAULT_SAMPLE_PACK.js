@@ -38,22 +38,22 @@ export const DEFAULT_SAMPLE_PACK = {
 };
 
 export const DEFAULT_SAMPLE_PACK_2 = {
-  2: {
+  0: {
     label: "Riff 1",
     name: "riff-1",
     path: "assets/riff1.wav",
   },
-  3: {
+  1: {
     label: "Riff 2",
     name: "riff-2",
     path: "assets/riff2.wav",
   },
-  0: {
+  2: {
     label: "Open Hat 1",
     name: "openhat-1",
     path: "assets/openhat1.wav",
   },
-  1: {
+  3: {
     label: "Closed Hat 1",
     name: "closedhat-1",
     path: "assets/closedhat1.wav",

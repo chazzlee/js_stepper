@@ -7,10 +7,11 @@ $yellow: rgb(241, 239, 115);
 
 body {
   font-family: "Sono", sans-serif;
+  width: 100vw;
+  height: 100vh;
 }
 
 #app {
-  background-color: $primary-dark;
   background: linear-gradient(
     145deg,
     rgba(108, 228, 182, 1) 6%,
@@ -18,10 +19,9 @@ body {
     rgba(38, 38, 56, 1) 84%,
     rgba(108, 228, 182, 1) 100%
   );
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .nav-header {
@@ -37,9 +37,16 @@ body {
   padding-right: 50px;
 }
 
+.social-links { 
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .container {
   margin: 0 auto;
   max-width: 1200px;
+  width: 1200px;
   height: 100%;
   padding: 0px 50px;
 }
@@ -56,9 +63,11 @@ body {
   background-color: $white;
   padding: 6px 12px;
   font-weight: 600;
+  border-radius: 6px;
 
   &:hover {
-    //TODO:
+    background-color: $primary-teal;
+    transition: background-color 120ms ease-in;
   }
 }
 
@@ -68,12 +77,14 @@ body {
 
 .sequencer-toolbar {
   height: 70px;
-  outline: 1px solid $white;
+  outline: 2px solid $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 4px 12px;
   margin-bottom: 14px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .toolbar-btn-group {
@@ -156,12 +167,33 @@ body {
 }
 
 .sequencer-footer {
+  outline: 2px solid $white;
+  height: 70px;
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   color: $white;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.made-with {
+  font-size: 12px;
+}
 
+.instructions {
+  max-width: 50%;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.instructions h3 { 
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: underline;
+  margin-bottom: 2px;
 }
 
 .measure-bar {
@@ -177,14 +209,10 @@ body {
   }
 }
 
-.slider-control {
-}
-
 .sequencer-container {
   display: flex;
   position: relative;
-  outline: 1px solid $white;
-  // box-shadow: rgb(147, 178, 211) 0px 20px 30px -10px;
+  outline: 2px solid $white;
 }
 
 .sequencer-side-keyboard {
@@ -202,10 +230,7 @@ body {
   grid-template-columns: repeat(16, 1fr);
 }
 
-.sequencer-footer {
-  outline: 1px solid $white;
-  height: 60px;
-}
+
 
 .cell {
   outline: 1px solid rgb(195, 202, 209, 0.4);
@@ -242,7 +267,7 @@ body {
   width: 100%;
   height: 14px;
   background-color: $primary-dark;
-  outline: 1px solid $white;
+  outline: 2px solid $white;
   position: absolute;
   top: -14px;
 }

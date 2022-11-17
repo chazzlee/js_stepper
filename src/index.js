@@ -28,9 +28,12 @@ function bootstrap() {
     return false;
   });
 
+  $("#metronome-toggle").checked = true;
+
   setBpm(Tone.Transport.bpm.value);
   setVolume(Tone.Destination.volume.value);
 }
+
 bootstrap();
 
 function createPlayersFromSamples(samples) {
@@ -108,7 +111,7 @@ function formatClockTime(seconds) {
   return date.toISOString().substring(11, 19);
 }
 
-const metronomeLoop = ["C6", null, "C6", null, "C6", null, "C6", null];
+const metronomeLoop = ["C5", null, "C5", null, "C5", null, "C5", null];
 let clockInterval;
 
 function createLoopManager(players) {
