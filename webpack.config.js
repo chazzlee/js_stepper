@@ -1,6 +1,5 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 
 const config = {
   entry: [
@@ -10,13 +9,6 @@ const config = {
   output: {
     path: path.join(__dirname, "dist"), // bundled file in dist/
     filename: "[name].js",
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, "dist"),
-    },
-    compress: true,
-    port: 9000,
   },
   module: {
     rules: [
@@ -38,12 +30,7 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new CopyPlugin({
-      patterns: [{ from: "src/index.html" }],
-    }),
-    new MiniCssExtractPlugin(),
-  ],
+  plugins: [new MiniCssExtractPlugin()],
 };
 
 module.exports = (env, argv) => {
