@@ -27,12 +27,14 @@ body {
 .nav-header {
   height: 45px;
   background-color: $white;
-  margin-bottom: 200px;
+  margin-bottom: 125px;
   display: flex;
   font-size: large;
   font-weight: 800;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .container {
@@ -159,6 +161,7 @@ body {
   align-items: center;
   justify-content: center;
   color: $white;
+
 }
 
 .measure-bar {
