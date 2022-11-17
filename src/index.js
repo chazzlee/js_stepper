@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { $, $$ } from "./app/utils";
+import { $ } from "./app/utils";
 import { DEFAULT_SAMPLE_PACK_2 } from "./app/constants/DEFAULT_SAMPLE_PACK.js";
 
 function setBpm(value) {
