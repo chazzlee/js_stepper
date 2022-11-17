@@ -6,3 +6,10 @@ Placing a marker will produce a sound of the respective sample as well as be sto
 Users are able to create simple loops and play back their creations.
 The Step Sequencer provides sliders to control the tempo (bpm) as well as the volume.
 A playhead runs when a user clicks play, keeping track of the position of the loop.
+
+## Technologies
+
+This demo application is built with SCSS, HTML, and Javascript.
+Webpack is used to bundle files and assets.
+Tone.js (https://tonejs.github.io/) is used for audio and sound management, as well as clock management.
+Without having a background in audio, Tone.js provided powerful, flexible abstractions that hid away some of the complexities.
