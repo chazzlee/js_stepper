@@ -157,7 +157,6 @@ function createLoopManager(players) {
     },
     stop() {
       const $playheadMarker = $(".playhead-marker");
-      //TODO: bug - won't always be removed (sometimes needs 2 clicks)
       $playheadMarker.style.animationDuration = 0;
       $playheadMarker.classList.remove("active");
       clearInterval(clockInterval);
