@@ -56,6 +56,19 @@
               </svg>
               Stop
             </button>
+            <label
+              for="metronome-toggle"
+              class="metronome-container"
+              title="Metronome"
+            >
+              <input
+                type="checkbox"
+                id="metronome-toggle"
+                class="metronome-toggle"
+                checked="true"
+              />
+              <div class="switch"></div>
+            </label>
           </div>
           <div class="bpm-container slider-container">
             <div class="slider">
@@ -67,7 +80,8 @@
               name="bpm"
               id="bpm-slider"
               class="slider-control"
-              min="0"
+              min="1"
+              value="120"
               max="300"
               step="1"
             />
@@ -78,7 +92,7 @@
           <div class="volume-container slider-container">
             <div class="slider">
               <label for="volume-slider" class="slider-label">Volume: </label>
-              <p id="volume-value">-15</p>
+              <p id="volume-value">0</p>
             </div>
             <input
               type="range"
@@ -86,7 +100,8 @@
               id="volume-slider"
               class="slider-control"
               min="-30"
-              max="0"
+              max="10"
+              value="0"
               step="1"
             />
           </div>

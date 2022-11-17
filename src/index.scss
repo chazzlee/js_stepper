@@ -58,7 +58,7 @@ body {
 }
 
 .toolbar-btn-group {
-  min-width: 240px;
+  min-width: 280px;
 }
 
 .group-right {
@@ -68,6 +68,47 @@ body {
 .clock-container {
   font-size: 28px;
   color: $white;
+}
+
+.metronome-container {
+  cursor: pointer;
+  background: #000;
+  width: 60px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 19px;
+  position: relative;
+  top: 2px;
+}
+
+.metronome-toggle {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked {
+    + .switch {
+      grid-template-columns: 1fr 1fr 0fr;
+      &::after {
+        background-color: #afddba;
+      }
+    }
+  }
+}
+
+.switch {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 0fr 1fr 1fr;
+  transition: 200ms;
+  &::after {
+    content: "";
+    border-radius: 50%;
+    background-color: #ccc;
+    grid-column: 2;
+    transition: background-color 200ms;
+  }
 }
 
 .slider-container {

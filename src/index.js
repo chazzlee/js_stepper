@@ -70,8 +70,8 @@ function createPlayersFromSamples(samples) {
 
 const players = createPlayersFromSamples(DEFAULT_SAMPLE_PACK);
 const metronome = new Tone.MembraneSynth({
-  volume: -8,
-  envelope: { attack: 0.05 },
+  volume: -12,
+  envelope: { attack: 0.05, sustain: 0, release: 0.1 },
 }).toDestination();
 
 function playNote(source, time, note = "C4", duration = "8n") {
@@ -86,9 +86,17 @@ function createLooper(count = 16, value = null) {
   return new Array(count).fill(value);
 }
 
-//--------------------------------------------------------------//
+//----------------------------------------------------------------------//
 
 // DOM Elements
+const $metronomeToggle = $("#metronome-toggle");
+$metronomeToggle.addEventListener("change", (e) => {
+  if (e.target.checked) {
+    metronome.volume.set({ value: -12 });
+  } else {
+    metronome.volume.set({ value: -Infinity });
+  }
+});
 
 // Keyboard
 const $sideKeyboardContainer = $("#side-keyboard");
@@ -119,9 +127,14 @@ function hasMarker($cell) {
   return $cell.hasChildNodes();
 }
 
+const metronomeLoop = ["C6", null, "C6", null, "C6", null, "C6", null];
 function createLoopManager(players) {
   let loopers = players.map((_player) => createLooper());
-  let sequences = {};
+  let sequences = {
+    metronome: new Tone.Sequence((time, note) => {
+      playNote(metronome, time, note, "4n");
+    }, metronomeLoop).start(0),
+  };
 
   return {
     updateLoop(position, note = "C4") {

@@ -176,6 +176,10 @@ body {
   padding: 6px 12px;
   font-weight: 600;
 }
+.hide {
+  display: none;
+}
+
 .sequencer-toolbar {
   height: 60px;
   outline: 1px solid white;
@@ -183,6 +187,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 4px 12px;
+}
+
+.toolbar-btn-group {
+  min-width: 240px;
+}
+
+.group-right {
+  margin-right: 0;
 }
 
 .clock-container {
@@ -204,6 +216,15 @@ body {
 
 .slider-label {
   margin-right: 4px;
+}
+
+.toolbar-btn-group {
+  display: flex;
+  gap: 12px;
+}
+
+.group-right {
+  justify-content: flex-end;
 }
 
 .sequencer-container {
@@ -243,7 +264,12 @@ body {
   background-color: rgb(195, 202, 209);
   outline: 1px solid rgb(141, 141, 141);
   font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
+}
+.key:hover {
+  background-color: #fff;
+  transition: background-color ease-in 120ms;
 }
 
 .marker {
