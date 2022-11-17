@@ -27,6 +27,7 @@ body {
 .nav-header {
   height: 45px;
   background-color: $white;
+  color: $primary-dark;
   margin-bottom: 125px;
   display: flex;
   font-size: large;
@@ -64,10 +65,15 @@ body {
   padding: 6px 12px;
   font-weight: 600;
   border-radius: 6px;
-
+  
   &:hover {
     background-color: $primary-teal;
     transition: background-color 120ms ease-in;
+  }
+
+  &:active {
+    background-color: rgb(88, 188, 149);
+    transition: background-color 20ms ease-in;
   }
 }
 
@@ -199,7 +205,8 @@ body {
 .measure-bar {
   height: 100%;
   display: flex;
-  color: $white;
+  color: $yellow;
+  font-weight: 800;
   align-items: center;
   font-size: small;
   justify-content: flex-start;

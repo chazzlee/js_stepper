@@ -155,6 +155,7 @@ body {
 .nav-header {
   height: 45px;
   background-color: rgb(241, 239, 239);
+  color: rgb(38, 38, 56);
   margin-bottom: 125px;
   display: flex;
   font-size: large;
@@ -196,6 +197,10 @@ body {
 .btn:hover {
   background-color: rgb(108, 228, 182);
   transition: background-color 120ms ease-in;
+}
+.btn:active {
+  background-color: rgb(88, 188, 149);
+  transition: background-color 20ms ease-in;
 }
 
 .hide {
@@ -324,7 +329,8 @@ body {
 .measure-bar {
   height: 100%;
   display: flex;
-  color: rgb(241, 239, 239);
+  color: rgb(241, 239, 115);
+  font-weight: 800;
   align-items: center;
   font-size: small;
   justify-content: flex-start;
