@@ -12,17 +12,14 @@ function setVolume(value) {
   $volumeValue.textContent = value;
 }
 
-function bootstrap() {
-  document.addEventListener("DOMContentLoaded", async () => {
-    await Tone.start();
-    console.log("Audio is ready");
-  });
+$("#context-trigger").addEventListener("click", async () => {
+  await Tone.start();
+  console.log("Audio is ready");
+  console.clear();
+});
 
-  $("#context-trigger").addEventListener("click", async () => {
-    await Tone.start();
-    console.log("Audio is ready");
-  });
-
+async function bootstrap() {
+  await Tone.start();
   $("#sequencer-container").addEventListener("contextmenu", (e) => {
     e.preventDefault();
     return false;
@@ -34,7 +31,9 @@ function bootstrap() {
   setVolume(Tone.Destination.volume.value);
 }
 
-bootstrap();
+document.addEventListener("DOMContentLoaded", async () => {
+  await bootstrap();
+});
 
 function createPlayersFromSamples(samples) {
   return Object.values(samples).map((sample) =>
@@ -150,7 +149,10 @@ function createLoopManager(players) {
     getSequences() {
       return sequences;
     },
-    start() {
+    async start() {
+      await Tone.start();
+      const $playheadMarker = $(".playhead-marker");
+      $playheadMarker.style.display = "block";
       if (Tone.Transport.state !== "started") {
         this.createSequences();
         Tone.Transport.start();
@@ -166,6 +168,7 @@ function createLoopManager(players) {
       const $playheadMarker = $(".playhead-marker");
       $playheadMarker.style.animationDuration = 0;
       $playheadMarker.classList.remove("active");
+      $playheadMarker.style.display = "none";
       clearInterval(clockInterval);
 
       const $clock = $("#clock-value");
@@ -202,10 +205,12 @@ $cells.forEach(($cell) => {
       if (!hasMarker($cell)) {
         placeMarker($cell, row);
         loopManager.updateLoop([row, col]);
+        loopManager.stop();
       }
     } else if (e.button === RIGHT_BUTTON && hasMarker($cell)) {
       removeMarker($cell);
       loopManager.updateLoop([row, col], null);
+      loopManager.stop();
     }
   });
 });
@@ -234,6 +239,7 @@ $clearButton.addEventListener("click", () => {
     }
   });
   loopManager.resetLoops();
+  loopManager.stop();
 });
 
 const $muteButton = $("#btn-mute");
